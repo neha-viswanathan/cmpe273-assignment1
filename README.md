@@ -7,4 +7,4 @@ To build a virtual trading stock system using Yahoo Finance API
 
 
 Achieved Outcome:
-Was able to successfull generate trade ID on the server side. But was unable to retrieve it to client side.
+Was able to successfully generate trade ID on the server side. But was unable to retrieve it to client side. Thus, unable to test the rest of the code.
