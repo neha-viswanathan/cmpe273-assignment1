@@ -16,23 +16,23 @@ type StockRequest struct {
 }
 
 type StockResponse struct {
-  tradeID string
-  symbol []string
-  pricePerStock []float64
-  numOfStock []int
-  unvestedAmount []float64
+  TradeID string
+  Symbol []string
+  PricePerStock []float64
+  NumOfStock []int
+  UnvestedAmount []float64
 }
 
 type TradeIDRequest struct {
-  tradeID string
+  TradeID string
 }
 
 type TradeIDResponse struct {
-  symbol []string
-  currentValue []float64
-  changeInValue []float64
-  numOfStock []int
-  unvestedAmount []float64
+  Symbol []string
+  CurrentValue []float64
+  ChangeInValue []float64
+  NumOfStock []int
+  UnvestedAmount []float64
 }
 
 //main function
@@ -58,7 +58,7 @@ func main() {
     arg1 := strings.Split(os.Args[1], ",")
     arg2 := os.Args[2]
     totalBudget, err := strconv.Atoi(arg2)
-    if err != nil {
+    if (err!= nil) {
       panic("Failed to convert : " + err.Error())
     }
 
@@ -71,7 +71,7 @@ func main() {
         panic("Failed to convert percentage: " + err.Error())
         //return
       }
-      fmt.Println(stockSym, percent, symPercent)
+      //fmt.Println(stockSym, percent, symPercent)
       //allocate amount to each Symbol based on budget and percentage per Symbol
       symbolAmount := float64(totalBudget * symPercent / 100 )
         fmt.Println("amt = ",symbolAmount)
@@ -85,19 +85,19 @@ func main() {
     stockReq = &StockRequest{stock}
 
     //client makes a remote call to server
-  err = client.Call("YahooFinance.QueryYahooFinance", &stockReq, &stockResp)
+  err = client.Call("YahooFinance.QueryYahooFinance", stockReq, &stockResp)
     if err != nil {
       fmt.Errorf("Error in RPC : ", err)
     }
 
-    for iter:=range stockResp.symbol{
+    for iter:=range stockResp.Symbol{
       //fmt.Println(iter)
-      stocks += fmt.Sprintf("%s:%d:$%f", stockResp.symbol[iter], stockResp.numOfStock[iter], stockResp.pricePerStock[iter])
+      stocks += fmt.Sprintf("%s:%d:$%f", stockResp.Symbol[iter], stockResp.NumOfStock[iter], stockResp.PricePerStock[iter])
     //  fmt.Println(stocks)
-      unvestedAmount += stockResp.unvestedAmount[iter]
+      unvestedAmount += stockResp.UnvestedAmount[iter]
     }
 
-    fmt.Println("Trade ID :: ", stockResp.tradeID)
+    fmt.Println("Trade ID :: ", stockResp.TradeID)
     fmt.Println("Stocks :: ", stocks)
     fmt.Println("Total Unvested Amount :: ", unvestedAmount)
 } else {
@@ -115,15 +115,15 @@ func main() {
   var portfolio, finalCurrentPrice string
   var totalUnvestedAmount float64
 
-  for iter := range tradeIDResp.symbol {
-    if tradeIDResp.changeInValue[iter] > 0 {
-      portfolio += fmt.Sprintf("%s:%d:+%f, ", tradeIDResp.symbol[iter], tradeIDResp.numOfStock[iter], tradeIDResp.currentValue[iter])
+  for iter := range tradeIDResp.Symbol {
+    if tradeIDResp.ChangeInValue[iter] > 0 {
+      portfolio += fmt.Sprintf("%s:%d:+%f, ", tradeIDResp.Symbol[iter], tradeIDResp.NumOfStock[iter], tradeIDResp.CurrentValue[iter])
     } else {
-      portfolio += fmt.Sprintf("%s:%d:-%f, ", tradeIDResp.symbol[iter], tradeIDResp.numOfStock[iter], tradeIDResp.currentValue[iter])
+      portfolio += fmt.Sprintf("%s:%d:-%f, ", tradeIDResp.Symbol[iter], tradeIDResp.NumOfStock[iter], tradeIDResp.CurrentValue[iter])
     }
 
-    finalCurrentPrice += fmt.Sprintf("%s:$%f, ", tradeIDResp.symbol[iter],  tradeIDResp.currentValue[iter])
-    totalUnvestedAmount += tradeIDResp.unvestedAmount[iter]
+    finalCurrentPrice += fmt.Sprintf("%s:$%f, ", tradeIDResp.Symbol[iter],  tradeIDResp.CurrentValue[iter])
+    totalUnvestedAmount += tradeIDResp.UnvestedAmount[iter]
   }
 
   fmt.Println("Portfolio :: ", portfolio)

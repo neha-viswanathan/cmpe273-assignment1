@@ -20,23 +20,23 @@ type StockRequest struct {
 }
 
 type StockResponse struct {
-  tradeID string
-  symbol []string
-  pricePerStock []float64
-  numOfStock []int
-  unvestedAmount []float64
+  TradeID string
+  Symbol []string
+  PricePerStock []float64
+  NumOfStock []int
+  UnvestedAmount []float64
 }
 
 type TradeIDRequest struct {
-  tradeID string
+  TradeID string
 }
 
 type TradeIDResponse struct {
-  symbol []string
-  currentValue []float64
-  changeInValue []float64
-  numOfStock []int
-  unvestedAmount []float64
+  Symbol []string
+  CurrentValue []float64
+  ChangeInValue []float64
+  NumOfStock []int
+  UnvestedAmount []float64
 }
 
 type Data struct {
@@ -99,7 +99,7 @@ const (
       fmt.Println("Error in generating Trade ID :: %v", err)
     }*/
     fmt.Println("TradeID :: ",tradeID)
-    stockResp.tradeID = string(tradeID)
+    stockResp.TradeID = string(tradeID)
   //  fmt.Println("in here1")
     tradeIDMap = make(map[string]map[string] Data)
     tempMap1 = make(map[string]Data)
@@ -111,10 +111,10 @@ const (
       stockCount := int(value/priceStock)
       unvestAmt := value - float64(stockCount)*priceStock
 
-      stockResp.symbol = append(stockResp.symbol, key)
-      stockResp.pricePerStock = append(stockResp.pricePerStock, priceStock)
-      stockResp.numOfStock = append(stockResp.numOfStock, int(stockCount))
-      stockResp.unvestedAmount = append(stockResp.unvestedAmount, unvestAmt)
+      stockResp.Symbol = append(stockResp.Symbol, key)
+      stockResp.PricePerStock = append(stockResp.PricePerStock, priceStock)
+      stockResp.NumOfStock = append(stockResp.NumOfStock, int(stockCount))
+      stockResp.UnvestedAmount = append(stockResp.UnvestedAmount, unvestAmt)
 
       sDetail = Data{priceStock,int(stockCount),unvestAmt}
 
@@ -158,7 +158,7 @@ func getPrice(sym string) float64 {
 }
 
 func (yF *YahooFinance) GetPortfolioDetails(tradeIDReq *TradeIDRequest, tradeIDResp *TradeIDResponse) error {
-  tempMap2 := tradeIDMap[tradeIDReq.tradeID]
+  tempMap2 := tradeIDMap[tradeIDReq.TradeID]
   for k, v := range tempMap2 {
     newPrice := getPrice(k)
     fmt.Println("New Price :: ", newPrice)
@@ -167,11 +167,11 @@ func (yF *YahooFinance) GetPortfolioDetails(tradeIDReq *TradeIDRequest, tradeIDR
     diffInPrice := newPrice - oldPrice
     fmt.Println("Difference in Price :: ", diffInPrice)
 
-    tradeIDResp.symbol = append(tradeIDResp.symbol, k)
-    tradeIDResp.currentValue = append(tradeIDResp.currentValue, newPrice)
-    tradeIDResp.changeInValue = append(tradeIDResp.changeInValue, diffInPrice)
-    tradeIDResp.numOfStock = append(tradeIDResp.numOfStock, v.numOfStock)
-    tradeIDResp.unvestedAmount = append(tradeIDResp.unvestedAmount, v.unvestedAmount)
+    tradeIDResp.Symbol = append(tradeIDResp.Symbol, k)
+    tradeIDResp.CurrentValue = append(tradeIDResp.CurrentValue, newPrice)
+    tradeIDResp.ChangeInValue = append(tradeIDResp.ChangeInValue, diffInPrice)
+    tradeIDResp.NumOfStock = append(tradeIDResp.NumOfStock, v.numOfStock)
+    tradeIDResp.UnvestedAmount = append(tradeIDResp.UnvestedAmount, v.unvestedAmount)
   }
 
   return nil
