@@ -7,4 +7,12 @@ To build a virtual trading stock system using Yahoo Finance API
 
 
 Achieved Outcome:
-Was able to successfully generate trade ID on the server side. But was unable to retrieve it to client side. Thus, unable to test the rest of the code.
+1. Able to successfully generate trade ID on the server side, along with number of stocks and unvested amount for each stock. The total unvested amount also is returned.
+2. With returned tradeID, the portfolio information was also returned.
+
+To run:
+go run yahFinServer.go
+1. go run yahFinClient.go FB:50,IBM:50 5000
+Returns tradeID xxxx
+2. go run yahFinClient.go xxxx
+Returns portfolio information
